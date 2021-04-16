@@ -26,7 +26,15 @@ app.use(bodyparser.json())
 
 //Routes ---
 app.get('/',(req,res) =>{
-    res.send("Hello")
+    Student.find()
+    .exec()
+    .then(result=>{
+        console.log(result);
+        res.status(200).send(result);
+    })
+    .catch(err=>{
+        res.status(500).send(err);
+    })
 })
 
 app.post('/students',(req,res) =>{
@@ -44,6 +52,37 @@ app.post('/students',(req,res) =>{
     }).catch(err => {
         console.log(err)
         res.status(500).json({msg:"Error Occured!"})
+    })
+})
+
+app.delete('/student/:id',(req,res) => {
+    const id = req.params.id
+    Student.remove({_id:id},(err,result)=>{
+        if(err)
+        {
+            console.log(err);
+            res.status(500).send('Error occured')
+        }
+        else{
+            res.status(200).json({msg:"Successfully deleted"})
+        }
+    })
+})
+
+app.put('/student/:id',(req,res)=>{
+    const name = req.body.name
+    const place = req.body.place
+    const room = req.body.room
+    const id = req.params.id
+
+    Student.update({_id:id},{$set:{name:name,place:place,room:room}})
+    .then(result=>{
+        console.log(result)
+        res.status(200).json({msg:"Successfully updated"})
+    })
+    .catch(err=>{
+        console.log(err)
+        res.status(500).json({msg:"Error occurred"})
     })
 })
 
