@@ -19,6 +19,7 @@ mongoose.connect("mongodb+srv://rahil_1407:codeforces@cluster0.nqlnr.mongodb.net
 
 //Middlewares ---
 app.use(cors())
+app.use(express.json())
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(bodyparser.json())
 
@@ -30,7 +31,20 @@ app.get('/',(req,res) =>{
 
 app.post('/students',(req,res) =>{
     console.log(req.body.name,req.body.place,req.body.room)
-    res.send("Recieved")
+    
+    const student = new Student ({
+        name :  req.body.name,
+        place : req.body.place,
+        room : req.body.room
+    })
+
+    student.save().then(() => {
+        console.log("Data Saved in DataBase!")
+        res.status(200).json({msg : "Successfully Submitted!"})
+    }).catch(err => {
+        console.log(err)
+        res.status(500).json({msg:"Error Occured!"})
+    })
 })
 
 
