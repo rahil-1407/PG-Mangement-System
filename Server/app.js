@@ -6,7 +6,7 @@ const Student = require('./models/Students')
 const cors = require('cors')
 const bodyparser = require('body-parser')
 
-const PORT = 3000 || process.env.PORT
+const PORT = 8081 || process.env.PORT
 
 
 //DB Connection ---
